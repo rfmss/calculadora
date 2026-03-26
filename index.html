@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="calc">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#b2c9c3">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon-precomposed" sizes="180x180" href="icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon.png">
+<title>calculadora</title>
+<style>
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+html, body {
+  height: 100%;
+  background: #b2c9c3;
+  color: #2a2a2a;
+  font-family: Georgia, 'Times New Roman', serif;
+  -webkit-text-size-adjust: 100%;
+  overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ── Standalone ── */
+@media all and (display-mode: standalone) {
+  .app { padding-top: 40px; }
+}
+body.standalone .app { padding-top: 40px; }
+
+/* ── App shell ── */
+.app {
+  height: 100%;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+
+/* ── Header ── */
+.header {
+  padding: 18px 16px 10px;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+.header-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  line-height: 1;
+}
+.header-mode {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  background: rgba(0,0,0,0.12);
+  border: none;
+  border-radius: 20px;
+  padding: 6px 12px;
+  color: #2a2a2a;
+  cursor: pointer;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -webkit-align-items: center;
+  align-items: center;
+}
+.header-mode:active { opacity: 0.7; }
+.header-mode svg { margin-right: 5px; }
+
+/* ── Display ── */
+.display-wrap {
+  padding: 0 16px 10px;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+.display {
+  background: #f0ece4;
+  border-radius: 18px;
+  padding: 18px 22px 14px;
+  min-height: 110px;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-justify-content: flex-end;
+  justify-content: flex-end;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.09);
+}
+.display-expr {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  color: #8aada6;
+  letter-spacing: 0.04em;
+  min-height: 18px;
+  text-align: right;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-bottom: 6px;
+}
+.display-main {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  text-align: right;
+  line-height: 1;
+  color: #2a2a2a;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.display-main.small { font-size: 32px; letter-spacing: -0.5px; }
+.display-main.xsmall { font-size: 22px; letter-spacing: 0; }
+
+/* ── Grid de botões ── */
+.grid-wrap {
+  -webkit-flex: 1;
+  flex: 1;
+  padding: 0 10px 16px;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  overflow: hidden;
+}
+.btn-row {
+  -webkit-flex: 1;
+  flex: 1;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  margin-bottom: 8px;
+}
+.btn-row:last-child { margin-bottom: 0; }
+.btn-row > * + * { margin-left: 8px; }
+
+/* ── Botão base ── */
+.btn {
+  -webkit-flex: 1;
+  flex: 1;
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-transition: -webkit-transform 0.10s;
+  transition: transform 0.10s;
+  position: relative;
+  overflow: hidden;
+}
+.btn:active {
+  -webkit-transform: scale(0.93);
+  transform: scale(0.93);
+}
+
+/* Variantes */
+.btn-num {
+  background: #f0ece4;
+  color: #2a2a2a;
+}
+.btn-op {
+  background: rgba(0,0,0,0.12);
+  color: #2a2a2a;
+}
+.btn-fn {
+  background: rgba(0,0,0,0.08);
+  color: #4a5e58;
+}
+.btn-eq {
+  background: #2a2a2a;
+  color: #f0ece4;
+}
+.btn-zero {
+  -webkit-flex: 2.12;
+  flex: 2.12;
+}
+
+/* Texto dos botões */
+.btn-label {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+}
+.btn-label.mono {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  font-weight: 400;
+}
+.btn-label.bold {
+  font-weight: 700;
+}
+.btn-label.op {
+  font-size: 26px;
+  font-weight: 300;
+}
+.btn-label.sm {
+  font-size: 16px;
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 80px; left: 50%;
+  -webkit-transform: translateX(-50%) translateY(16px);
+  transform: translateX(-50%) translateY(16px);
+  background: #2a2a2a;
+  color: #f0ece4;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 9px 18px;
+  border-radius: 40px;
+  opacity: 0;
+  z-index: 999;
+  pointer-events: none;
+  white-space: nowrap;
+  -webkit-transition: opacity 0.2s, -webkit-transform 0.2s;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.toast.on {
+  opacity: 1;
+  -webkit-transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-title">calculadora</div>
+    <button class="header-mode" id="btn-mode" onclick="toggleMode()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="12" height="12" fill="currentColor">
+        <path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48Z"/>
+      </svg><span id="mode-label">científica</span>
+    </button>
+  </div>
+
+  <!-- DISPLAY -->
+  <div class="display-wrap">
+    <div class="display">
+      <div class="display-expr" id="display-expr">&nbsp;</div>
+      <div class="display-main" id="display-main">0</div>
+    </div>
+  </div>
+
+  <!-- BOTÕES — modo básico (padrão) -->
+  <div class="grid-wrap" id="grid-basic">
+    <!-- linha 1: funções -->
+    <div class="btn-row">
+      <button class="btn btn-fn" onclick="press('C')"><span class="btn-label mono">C</span></button>
+      <button class="btn btn-fn" onclick="press('sign')"><span class="btn-label mono">+/-</span></button>
+      <button class="btn btn-fn" onclick="press('%')"><span class="btn-label mono">%</span></button>
+      <button class="btn btn-op" onclick="press('/')"><span class="btn-label op">÷</span></button>
+    </div>
+    <!-- linha 2 -->
+    <div class="btn-row">
+      <button class="btn btn-num" onclick="press('7')"><span class="btn-label">7</span></button>
+      <button class="btn btn-num" onclick="press('8')"><span class="btn-label">8</span></button>
+      <button class="btn btn-num" onclick="press('9')"><span class="btn-label">9</span></button>
+      <button class="btn btn-op" onclick="press('*')"><span class="btn-label op">×</span></button>
+    </div>
+    <!-- linha 3 -->
+    <div class="btn-row">
+      <button class="btn btn-num" onclick="press('4')"><span class="btn-label">4</span></button>
+      <button class="btn btn-num" onclick="press('5')"><span class="btn-label">5</span></button>
+      <button class="btn btn-num" onclick="press('6')"><span class="btn-label">6</span></button>
+      <button class="btn btn-op" onclick="press('-')"><span class="btn-label op">−</span></button>
+    </div>
+    <!-- linha 4 -->
+    <div class="btn-row">
+      <button class="btn btn-num" onclick="press('1')"><span class="btn-label">1</span></button>
+      <button class="btn btn-num" onclick="press('2')"><span class="btn-label">2</span></button>
+      <button class="btn btn-num" onclick="press('3')"><span class="btn-label">3</span></button>
+      <button class="btn btn-op" onclick="press('+')"><span class="btn-label op">+</span></button>
+    </div>
+    <!-- linha 5 -->
+    <div class="btn-row">
+      <button class="btn btn-num btn-zero" onclick="press('0')"><span class="btn-label">0</span></button>
+      <button class="btn btn-num" onclick="press('.')"><span class="btn-label bold">.</span></button>
+      <button class="btn btn-eq"  onclick="press('=')"><span class="btn-label bold">=</span></button>
+    </div>
+  </div>
+
+  <!-- BOTÕES — modo científico -->
+  <div class="grid-wrap" id="grid-sci" style="display:none">
+    <!-- linha 0: científico -->
+    <div class="btn-row">
+      <button class="btn btn-fn" onclick="press('sin')"><span class="btn-label mono sm">sin</span></button>
+      <button class="btn btn-fn" onclick="press('cos')"><span class="btn-label mono sm">cos</span></button>
+      <button class="btn btn-fn" onclick="press('tan')"><span class="btn-label mono sm">tan</span></button>
+      <button class="btn btn-fn" onclick="press('sqrt')"><span class="btn-label mono">√</span></button>
+      <button class="btn btn-fn" onclick="press('pow2')"><span class="btn-label mono sm">x²</span></button>
+    </div>
+    <!-- linha 1: científico -->
+    <div class="btn-row">
+      <button class="btn btn-fn" onclick="press('log')"><span class="btn-label mono sm">log</span></button>
+      <button class="btn btn-fn" onclick="press('ln')"><span class="btn-label mono sm">ln</span></button>
+      <button class="btn btn-fn" onclick="press('pi')"><span class="btn-label mono">π</span></button>
+      <button class="btn btn-fn" onclick="press('e')"><span class="btn-label mono sm">e</span></button>
+      <button class="btn btn-fn" onclick="press('inv')"><span class="btn-label mono sm">1/x</span></button>
+    </div>
+    <!-- linha 2: funções -->
+    <div class="btn-row">
+      <button class="btn btn-fn" onclick="press('C')"><span class="btn-label mono">C</span></button>
+      <button class="btn btn-fn" onclick="press('sign')"><span class="btn-label mono sm">+/-</span></button>
+      <button class="btn btn-fn" onclick="press('%')"><span class="btn-label mono">%</span></button>
+      <button class="btn btn-op" onclick="press('/')"><span class="btn-label op">÷</span></button>
+      <button class="btn btn-op" onclick="press('*')"><span class="btn-label op">×</span></button>
+    </div>
+    <!-- linha 3 -->
+    <div class="btn-row">
+      <button class="btn btn-num" onclick="press('7')"><span class="btn-label">7</span></button>
+      <button class="btn btn-num" onclick="press('8')"><span class="btn-label">8</span></button>
+      <button class="btn btn-num" onclick="press('9')"><span class="btn-label">9</span></button>
+      <button class="btn btn-op" onclick="press('-')"><span class="btn-label op">−</span></button>
+      <button class="btn btn-op" onclick="press('+')"><span class="btn-label op">+</span></button>
+    </div>
+    <!-- linha 4 -->
+    <div class="btn-row">
+      <button class="btn btn-num" onclick="press('4')"><span class="btn-label">4</span></button>
+      <button class="btn btn-num" onclick="press('5')"><span class="btn-label">5</span></button>
+      <button class="btn btn-num" onclick="press('6')"><span class="btn-label">6</span></button>
+      <button class="btn btn-num" onclick="press('1')"><span class="btn-label">1</span></button>
+      <button class="btn btn-num" onclick="press('2')"><span class="btn-label">2</span></button>
+    </div>
+    <!-- linha 5 -->
+    <div class="btn-row">
+      <button class="btn btn-num" onclick="press('3')"><span class="btn-label">3</span></button>
+      <button class="btn btn-num btn-zero" onclick="press('0')"><span class="btn-label">0</span></button>
+      <button class="btn btn-num" onclick="press('.')"><span class="btn-label bold">.</span></button>
+      <button class="btn btn-eq"  onclick="press('=')"><span class="btn-label bold">=</span></button>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════════════════════
+var display    = '';   // o que o usuário está digitando
+var storedVal  = null; // valor armazenado antes do operador
+var pendingOp  = null; // operador pendente: + - * /
+var justEvaled = false; // acabou de apertar =
+var sciMode    = false;
+
+// ══════════════════════════════════════════════════════
+// DISPLAY
+// ══════════════════════════════════════════════════════
+function updateDisplay(val, expr) {
+  var el = document.getElementById('display-main');
+  var s  = String(val);
+
+  // Ajusta tamanho da fonte conforme comprimento
+  el.className = 'display-main';
+  if (s.length > 12) el.className = 'display-main xsmall';
+  else if (s.length > 8) el.className = 'display-main small';
+
+  el.textContent = s;
+
+  var exprEl = document.getElementById('display-expr');
+  exprEl.textContent = expr || '\u00a0';
+}
+
+function fmtNum(n) {
+  if (!isFinite(n)) return 'erro';
+  // Evita notação científica para números razoáveis
+  if (Math.abs(n) > 1e15 || (n !== 0 && Math.abs(n) < 1e-10)) {
+    return n.toExponential(4);
+  }
+  // Remove trailing zeros após ponto decimal
+  var s = parseFloat(n.toPrecision(12)).toString();
+  return s;
+}
+
+// ══════════════════════════════════════════════════════
+// LÓGICA
+// ══════════════════════════════════════════════════════
+function applyOp(a, op, b) {
+  if (op === '+') return a + b;
+  if (op === '-') return a - b;
+  if (op === '*') return a * b;
+  if (op === '/') {
+    if (b === 0) { toast('divisão por zero'); return 0; }
+    return a / b;
+  }
+  return b;
+}
+
+function press(key) {
+  // ── Limpar ─────────────────────────────────────────
+  if (key === 'C') {
+    display    = '';
+    storedVal  = null;
+    pendingOp  = null;
+    justEvaled = false;
+    updateDisplay('0', '');
+    return;
+  }
+
+  // ── Backspace (toque longo → futuro, aqui via CE) ──
+  if (key === 'CE') {
+    if (display.length > 0) display = display.slice(0, -1);
+    updateDisplay(display || '0', buildExpr());
+    return;
+  }
+
+  // ── Funções científicas imediatas ──────────────────
+  var sci = { sin: Math.sin, cos: Math.cos, tan: Math.tan,
+              log: Math.log10, ln: Math.log, sqrt: Math.sqrt };
+  if (sci[key]) {
+    var v = display !== '' ? parseFloat(display) : (storedVal || 0);
+    var res = sci[key](v);
+    display = fmtNum(res);
+    storedVal = res;
+    pendingOp = null;
+    justEvaled = true;
+    updateDisplay(display, key + '(' + fmtNum(v) + ')');
+    return;
+  }
+  if (key === 'pow2') {
+    var v2 = display !== '' ? parseFloat(display) : (storedVal || 0);
+    var res2 = v2 * v2;
+    display = fmtNum(res2);
+    storedVal = res2;
+    pendingOp = null;
+    justEvaled = true;
+    updateDisplay(display, '(' + fmtNum(v2) + ')²');
+    return;
+  }
+  if (key === 'inv') {
+    var v3 = display !== '' ? parseFloat(display) : (storedVal || 0);
+    if (v3 === 0) { toast('divisão por zero'); return; }
+    var res3 = 1 / v3;
+    display = fmtNum(res3);
+    storedVal = res3;
+    pendingOp = null;
+    justEvaled = true;
+    updateDisplay(display, '1 / ' + fmtNum(v3));
+    return;
+  }
+  if (key === 'pi') {
+    display = fmtNum(Math.PI);
+    updateDisplay(display, 'π');
+    justEvaled = false;
+    return;
+  }
+  if (key === 'e') {
+    display = fmtNum(Math.E);
+    updateDisplay(display, 'e');
+    justEvaled = false;
+    return;
+  }
+
+  // ── Porcentagem ────────────────────────────────────
+  if (key === '%') {
+    var cur = parseFloat(display || '0');
+    var pct = storedVal !== null ? (storedVal * cur / 100) : (cur / 100);
+    display = fmtNum(pct);
+    updateDisplay(display, buildExpr());
+    return;
+  }
+
+  // ── Troca de sinal ─────────────────────────────────
+  if (key === 'sign') {
+    if (display === '' || display === '0') return;
+    if (display[0] === '-') display = display.slice(1);
+    else display = '-' + display;
+    updateDisplay(display, buildExpr());
+    return;
+  }
+
+  // ── Operadores (+, -, *, /) ─────────────────────────
+  if (key === '+' || key === '-' || key === '*' || key === '/') {
+    if (pendingOp && display !== '') {
+      var r = applyOp(storedVal, pendingOp, parseFloat(display));
+      storedVal = r;
+      updateDisplay(fmtNum(r), fmtNum(r) + ' ' + opLabel(key));
+    } else {
+      storedVal = display !== '' ? parseFloat(display) : (storedVal || 0);
+      updateDisplay(fmtNum(storedVal), fmtNum(storedVal) + ' ' + opLabel(key));
+    }
+    pendingOp  = key;
+    display    = '';
+    justEvaled = false;
+    return;
+  }
+
+  // ── Igual ──────────────────────────────────────────
+  if (key === '=') {
+    if (pendingOp === null) return;
+    var b2 = display !== '' ? parseFloat(display) : (storedVal || 0);
+    var expr2 = fmtNum(storedVal) + ' ' + opLabel(pendingOp) + ' ' + fmtNum(b2);
+    var result = applyOp(storedVal, pendingOp, b2);
+    var rs = fmtNum(result);
+    storedVal  = result;
+    pendingOp  = null;
+    display    = rs;
+    justEvaled = true;
+    updateDisplay(rs, expr2);
+    return;
+  }
+
+  // ── Ponto decimal ─────────────────────────────────
+  if (key === '.') {
+    if (justEvaled) { display = '0'; justEvaled = false; }
+    if (display.indexOf('.') !== -1) return;
+    if (display === '') display = '0';
+    display += '.';
+    updateDisplay(display, buildExpr());
+    return;
+  }
+
+  // ── Dígitos 0-9 ────────────────────────────────────
+  if (key >= '0' && key <= '9') {
+    if (justEvaled) {
+      // Começa novo número após =
+      display    = key === '0' ? '' : key;
+      justEvaled = false;
+      updateDisplay(display || '0', '');
+      return;
+    }
+    if (display === '0' && key === '0') return;
+    if (display === '0') display = key;
+    else display += key;
+    if (display.replace('-','').replace('.','').length > 15) return;
+    updateDisplay(display, buildExpr());
+    return;
+  }
+}
+
+function buildExpr() {
+  if (pendingOp && storedVal !== null) {
+    return fmtNum(storedVal) + ' ' + opLabel(pendingOp);
+  }
+  return '';
+}
+
+function opLabel(op) {
+  if (op === '+') return '+';
+  if (op === '-') return '−';
+  if (op === '*') return '×';
+  if (op === '/') return '÷';
+  return op;
+}
+
+// ══════════════════════════════════════════════════════
+// MODO CIENTÍFICO
+// ══════════════════════════════════════════════════════
+function toggleMode() {
+  sciMode = !sciMode;
+  document.getElementById('grid-basic').style.display = sciMode ? 'none'  : '-webkit-flex';
+  document.getElementById('grid-basic').style.display = sciMode ? 'none'  : 'flex';
+  document.getElementById('grid-sci').style.display   = sciMode ? '-webkit-flex' : 'none';
+  document.getElementById('grid-sci').style.display   = sciMode ? 'flex'  : 'none';
+  document.getElementById('mode-label').textContent   = sciMode ? 'básica' : 'científica';
+}
+
+// ══════════════════════════════════════════════════════
+// TECLADO FÍSICO
+// ══════════════════════════════════════════════════════
+document.addEventListener('keydown', function(e) {
+  var k = e.key;
+  if (k >= '0' && k <= '9') { press(k); return; }
+  if (k === '+' || k === '-' || k === '*' || k === '/') { press(k); return; }
+  if (k === 'Enter' || k === '=') { press('='); return; }
+  if (k === 'Escape') { press('C'); return; }
+  if (k === 'Backspace') { press('CE'); return; }
+  if (k === '.') { press('.'); return; }
+  if (k === '%') { press('%'); return; }
+});
+
+// ══════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast on';
+  clearTimeout(t._t);
+  t._t = setTimeout(function() { t.className = 'toast'; }, 2500);
+}
+
+// ══════════════════════════════════════════════════════
+// STANDALONE
+// ══════════════════════════════════════════════════════
+if (window.navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches) {
+  document.getElementById('app').className =
+    (document.getElementById('app').className + ' standalone').trim();
+  document.body.className = (document.body.className + ' standalone').trim();
+}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+updateDisplay('0', '');
+</script>
+</body>
+</html>
