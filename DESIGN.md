@@ -243,13 +243,38 @@ if (window.navigator.standalone === true ||
 | `Promise`             | Callbacks                      |
 | Service Workers       | LocalStorage (dual-key)        |
 
-### Flexbox — sempre com prefixo
+### Flexbox — triplo prefixo obrigatório para iOS 9
+
+iOS 9 Safari suporta flexbox mas exige os três prefixos. **Sem `-webkit-box-`**,
+o conteúdo de botões vai para o canto superior esquerdo (bug crítico observado na calculadora).
+
 ```css
-display: -webkit-flex; display: flex;
--webkit-align-items: center; align-items: center;
--webkit-justify-content: space-between; justify-content: space-between;
--webkit-flex: 1; flex: 1;
+/* CORRETO — triplo prefixo para iOS 7/8/9 */
+display: -webkit-box;       /* iOS 7 */
+display: -webkit-flex;      /* iOS 8 */
+display: flex;              /* moderno */
+
+-webkit-box-orient: horizontal;   /* ou: vertical */
+-webkit-box-direction: normal;
+-webkit-flex-direction: row;      /* ou: column */
+flex-direction: row;
+
+-webkit-box-pack: center;         /* justify-content */
+-webkit-justify-content: center;
+justify-content: center;
+
+-webkit-box-align: center;        /* align-items */
+-webkit-align-items: center;
+align-items: center;
+
+-webkit-box-flex: 1;              /* flex-grow */
+-webkit-flex: 1;
+flex: 1;
 ```
+
+> **Regra de ouro:** Se um botão ou container usa `flex` para centrar seu conteúdo,
+> SEMPRE adicionar `-webkit-box-pack: center` e `-webkit-box-align: center`.
+> A ausência desses prefixos é a causa mais comum de desalinhamento no iPad mini.
 
 ### LocalStorage — padrão dual-key
 ```javascript
@@ -283,10 +308,74 @@ function load() {
 
 ---
 
+## Acessibilidade — público 60+
+
+O público-alvo real é 60+. Toda decisão visual deve favorecer a **legibilidade sem esforço**.
+
+### Tamanhos mínimos de fonte
+
+| Contexto                   | Mínimo | Recomendado |
+|----------------------------|--------|-------------|
+| Botão de ação principal    | 20px   | 28-32px     |
+| Operador / símbolo         | 24px   | 34-36px     |
+| Função (C, +/-, %)         | 16px   | 18-20px     |
+| Label de campo             | 14px   | 16px        |
+| Meta info (data, contador) | 10px   | 11px (ok)   |
+| **Nunca abaixo de**        | **10px** para qualquer texto visível |
+
+### Tamanhos mínimos de área tocável
+
+- Botão: mínimo **44×44px** — preferencialmente **54px+**
+- FAB: **56px** de diâmetro
+- Cards clicáveis: altura mínima **80px**
+
+### Contraste
+
+- Texto principal sobre cream (#f0ece4): chumbo (#2a2a2a) — ratio 14:1 ✓
+- Texto secundário sobre sage (#b2c9c3): sage-dark (#4a5e58) — ratio 4.5:1 ✓
+- Nunca usar texto cinza claro sobre fundo claro
+
+### Grid responsivo — bento
+
+O grid de cards deve se adaptar à tela, nunca fixar o número de colunas no CSS.
+
+```javascript
+function calcLayout() {
+  var w = window.innerWidth || 320;
+  var padH = 28;    // 14px cada lado
+  var gap  = 10;
+  // Quantas colunas cabem com card mínimo de 150px
+  var cols = Math.floor((w - padH + gap) / (150 + gap));
+  if (cols < 2) cols = 2;
+  if (cols > 4) cols = 4;
+  var cardW = Math.floor((w - padH - gap * (cols - 1)) / cols);
+  var cardH = Math.floor(cardW * 0.78); // proporção livro de notas
+  return { cols: cols, cardW: cardW, cardH: cardH };
+}
+// Re-calcular ao mudar orientação
+window.addEventListener('orientationchange', function() {
+  setTimeout(renderList, 300);
+}, false);
+```
+
+Resultado esperado por tela:
+| Dispositivo | Largura | Colunas | Card width |
+|-------------|---------|---------|------------|
+| iPhone SE   | 375px   | 2 cols  | ~168px     |
+| iPhone Pro  | 430px   | 2 cols  | ~196px     |
+| iPad mini   | 768px   | 3 cols  | ~240px     |
+| iPad Pro    | 1024px  | 4 cols  | ~240px     |
+
+---
+
 ## Checklist de qualidade (todo projeto novo)
 
 - [ ] ES5 puro (sem const/let/arrow/template literals)
-- [ ] Flexbox com prefixos -webkit-
+- [ ] Flexbox TRIPLO prefixo: `-webkit-box-` + `-webkit-` + sem prefixo
+- [ ] `-webkit-box-pack: center` e `-webkit-box-align: center` em todo flex container que centra
+- [ ] Fonte mínima 20px em botões de ação, 32px+ em calculadoras/jogos
+- [ ] Área tocável mínima 44×44px em qualquer elemento clicável
+- [ ] Grid responsivo: calcLayout() com window.innerWidth, nunca colunas fixas no CSS
 - [ ] Paleta sage/cream/chumbo aplicada
 - [ ] Georgia para display, Courier New para UI
 - [ ] Todos os botões com Phosphor SVG inline
