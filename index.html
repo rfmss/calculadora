@@ -243,6 +243,27 @@ body.standalone .app { padding-top: 40px; }
   font-weight: 600;
 }
 
+/* ── Landscape ── */
+@media (orientation: landscape) {
+  .header { padding: 5px 14px; }
+  .header-title { font-size: 18px; }
+  .display-wrap { padding: 0 12px 5px; }
+  .display { min-height: 54px; padding: 8px 16px 8px; }
+  .display-expr { font-size: 12px; min-height: 14px; margin-bottom: 3px; }
+  .display-main { font-size: 36px; letter-spacing: -1px; }
+  .display-main.small  { font-size: 26px; }
+  .display-main.xsmall { font-size: 18px; }
+  .grid-wrap { padding: 0 8px 6px; }
+  .btn-row { margin-bottom: 5px; }
+  .btn-row > * + * { margin-left: 6px; }
+  .btn { border-radius: 10px; }
+  .btn-label      { font-size: 30px; }
+  .btn-label.mono { font-size: 17px; }
+  .btn-label.bold { font-size: 30px; }
+  .btn-label.op   { font-size: 34px; }
+  .btn-label.sm   { font-size: 20px; }
+}
+
 /* ── Toast ── */
 .toast {
   position: fixed;
