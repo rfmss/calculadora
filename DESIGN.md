@@ -1,32 +1,82 @@
 # Design Manual — rfmss projects
 
 Sistema de design compartilhado por todos os projetos de Rafa Mass.
-Inspirado no visual da Anthropic (Code w/ Claude), adaptado para o iPad mini (iOS 9.3.5).
+Baseado na paleta oficial da Anthropic (extraída de "The Complete Guide to Building Skills for Claude"),
+adaptado para o iPad mini (iOS 9.3.5).
 
 ---
 
-## Paleta de cores
+## Paleta Anthropic — cores base
 
-| Nome      | Hex       | Uso                                         |
-|-----------|-----------|---------------------------------------------|
-| sage      | `#b2c9c3` | Background principal, theme-color, header   |
-| cream     | `#f0ece4` | Superfícies (cards, editor, sheets)         |
-| chumbo    | `#2a2a2a` | Texto principal, botões primários, FAB      |
-| sage-dark | `#4a5e58` | Textos secundários, subtítulos              |
-| sage-mid  | `#8aada6` | Bordas sutis, separadores                   |
-| cream-dim | `#ccc8c0` | Placeholders, datas, labels apagados        |
-| danger    | `#c0392b` | Ações destrutivas (apagar, erro)            |
-| success   | `#5a9e50` | Confirmação (salvo, ok)                     |
+Estas são as 7 cores extraídas diretamente do PDF oficial da Anthropic.
+Cada app/jogo recebe uma cor como identidade visual (ícone sólido na tela inicial).
+
+| Token        | Hex       | Referência no PDF       | App atribuído     |
+|--------------|-----------|-------------------------|-------------------|
+| `terra`      | `#cd7b5f` | Capa / terra cotta      | calculadora       |
+| `olive`      | `#6e7a4e` | Cap 1 — Fundamentals    | (reservado)       |
+| `rose`       | `#c4708a` | Cap 2 — Planning        | bijuled           |
+| `lavender`   | `#9b8fc4` | Cap 3 — Testing         | caça-palavras (p) |
+| `blue`       | `#6b9ab8` | Cap 4 — Distribution    | dirlizanu         |
+| `sage`       | `#8fb3ae` | Cap 5 — Patterns        | bloco             |
+| `sand`       | `#e0d8cc` | Cap 6 — Resources       | FernandaTowers    |
+
+### Regra dos ícones PWA — cor sólida chapada
+Cada app tem **um ícone de cor sólida, sem design** — só a cor Anthropic.
+Isso cria uma identidade limpa e moderna na tela inicial, idêntica a apps nativos.
+
+```
+icon.png / icon-192.png / icon-512.png = retângulo 100% da cor do app, sem texto, sem logo
+```
+
+Geração do ícone (Python):
+```python
+from PIL import Image
+img = Image.new('RGB', (512, 512), (205, 123, 95))  # terra #cd7b5f
+img.save('icon-512.png')
+```
+
+---
+
+## Paleta de interface
+
+Cores usadas nos elementos de UI (não nos ícones):
+
+| Nome        | Hex       | Uso                                         |
+|-------------|-----------|---------------------------------------------|
+| `bg`        | `#b2c9c3` | Background principal, theme-color, header   |
+| `surface`   | `#f0ece4` | Superfícies (cards, editor, sheets)         |
+| `ink`       | `#2a2a2a` | Texto principal, botões primários, FAB      |
+| `ink-light` | `#4a5e58` | Textos secundários, subtítulos              |
+| `border`    | `#8aada6` | Bordas sutis, separadores                   |
+| `muted`     | `#ccc8c0` | Placeholders, datas, labels apagados        |
+| `danger`    | `#c0392b` | Ações destrutivas (apagar, erro)            |
+| `success`   | `#5a9e50` | Confirmação (salvo, ok)                     |
+
+> **Nota:** O `bg` (#b2c9c3) é derivado do `sage` Anthropic (#8fb3ae) levemente clareado
+> para maior legibilidade como fundo de tela completa.
 
 ### Variáveis CSS (copiar em todo projeto)
 ```css
 :root {
-  --sage:      #b2c9c3;
-  --cream:     #f0ece4;
-  --chumbo:    #2a2a2a;
-  --sage-dark: #4a5e58;
+  /* Interface */
+  --bg:        #b2c9c3;
+  --surface:   #f0ece4;
+  --ink:       #2a2a2a;
+  --ink-light: #4a5e58;
+  --border:    #8aada6;
+  --muted:     #ccc8c0;
   --danger:    #c0392b;
   --success:   #5a9e50;
+
+  /* Paleta Anthropic (para ícones e acentos) */
+  --terra:     #cd7b5f;
+  --olive:     #6e7a4e;
+  --rose:      #c4708a;
+  --lavender:  #9b8fc4;
+  --blue:      #6b9ab8;
+  --sage:      #8fb3ae;
+  --sand:      #e0d8cc;
 }
 ```
 
