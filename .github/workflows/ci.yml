@@ -1,0 +1,29 @@
+name: Calculator audit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Check JavaScript syntax
+        run: |
+          node --check assets/js/calculator-engine.js
+          node --check assets/js/app.js
+          node --check sw.js
+      - name: Audit calculations
+        run: node scripts/audit-calculator.js
+      - name: Validate manifest
+        run: node -e "JSON.parse(require('fs').readFileSync('manifest.json','utf8'))"
+      - name: Reject inline handlers
+        run: '! grep -R -E "on(click|keydown|touchstart)=" index.html'
