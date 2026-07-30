@@ -1,4 +1,4 @@
-var CACHE = 'calculadora-blueprint-v1';
+var CACHE = 'calculadora-blueprint-v2';
 var CORE = [
   './',
   './index.html',
