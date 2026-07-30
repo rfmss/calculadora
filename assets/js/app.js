@@ -5,7 +5,6 @@
   var display = document.getElementById('display-main');
   var expression = document.getElementById('display-expression');
   var status = document.getElementById('calculator-status');
-  var basicPanel = document.getElementById('basic-panel');
   var scientificPanel = document.getElementById('scientific-panel');
   var modeButton = document.getElementById('mode-toggle');
   var angleButton = document.getElementById('angle-toggle');
@@ -47,7 +46,6 @@
 
   function toggleMode() {
     scientific = !scientific;
-    basicPanel.hidden = scientific;
     scientificPanel.hidden = !scientific;
     modeButton.setAttribute('aria-pressed', scientific ? 'true' : 'false');
     modeButton.querySelector('.button-label').textContent = scientific ? 'Básica' : 'Científica';
@@ -65,15 +63,23 @@
     catch (error) { return 'deg'; }
   }
 
+  function closestFrom(target, selector) {
+    while (target && target !== document) {
+      if (target.matches && target.matches(selector)) return target;
+      target = target.parentNode;
+    }
+    return null;
+  }
+
   function registerEvents() {
     document.addEventListener('click', function (event) {
-      var keyButton = event.target.closest('[data-key]');
+      var keyButton = closestFrom(event.target, '[data-key]');
       if (keyButton) {
         press(keyButton.getAttribute('data-key'));
         return;
       }
-      if (event.target.closest('#mode-toggle')) toggleMode();
-      else if (event.target.closest('#angle-toggle')) toggleAngleMode();
+      if (closestFrom(event.target, '#mode-toggle')) toggleMode();
+      else if (closestFrom(event.target, '#angle-toggle')) toggleAngleMode();
     });
 
     document.addEventListener('keydown', function (event) {
