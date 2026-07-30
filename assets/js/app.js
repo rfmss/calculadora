@@ -8,7 +8,7 @@
   var scientificPanel = document.getElementById('scientific-panel');
   var modeButton = document.getElementById('mode-toggle');
   var angleButton = document.getElementById('angle-toggle');
-  var angleLabel = angleButton.querySelector('.angle-label');
+  var angleLabel = angleButton.querySelector('.angle-label') || angleButton.querySelector('span');
   var viewportTimer = null;
   var scientific = false;
 
