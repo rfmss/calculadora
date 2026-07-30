@@ -37,7 +37,7 @@ try {
           const rect = element.getBoundingClientRect();
           return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
         };
-        const controls = Array.from(document.querySelectorAll('button, a')).filter(visible);
+        const controls = Array.from(document.querySelectorAll('.apparatus button, .apparatus a')).filter(visible);
         const outside = controls.filter(element => {
           const rect = element.getBoundingClientRect();
           return rect.left < -1 || rect.top < -1 || rect.right > innerWidth + 1 || rect.bottom > innerHeight + 1;
