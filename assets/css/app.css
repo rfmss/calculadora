@@ -300,6 +300,41 @@ body[data-viewport="short"] .display-expression { margin-block: 4px 1px; }
 body[data-viewport="short"] .keypad { gap: 5px; }
 body[data-viewport="short"] .scientific-panel { gap: 4px; }
 
+/* Optical correction for lining numerals inside tactile keys. */
+.key {
+  overflow: visible;
+  padding-block: .12em .18em;
+  font-size: clamp(1.35rem, 4.35vh, 2.3rem);
+  line-height: 1.16;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.key-function {
+  padding-block: .22em;
+  line-height: 1.18;
+}
+.key-operator,
+.key-equals {
+  font-size: clamp(1.45rem, 4.65vh, 2.45rem);
+  line-height: 1.08;
+}
+
+@media (max-width: 520px) {
+  .key { font-size: clamp(1.25rem, 4.8vh, 2rem); }
+  .key-operator,
+  .key-equals { font-size: clamp(1.35rem, 5vh, 2.1rem); }
+}
+
+@media (orientation: landscape) and (max-height: 650px) {
+  .key { font-size: clamp(1.05rem, 4.55vh, 1.72rem); line-height: 1.14; }
+  .key-operator,
+  .key-equals { font-size: clamp(1.15rem, 4.8vh, 1.82rem); }
+}
+
+body[data-viewport="short"] .key {
+  font-size: clamp(1.05rem, 4.25vh, 1.7rem);
+  line-height: 1.14;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
 }
