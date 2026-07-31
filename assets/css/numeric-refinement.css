@@ -1,0 +1,112 @@
+/*
+ * Calculator-specific numeric refinement.
+ * Typography roles come from RafaMass Blueprint System 1.1.0.
+ */
+
+.display-panel {
+  padding-inline-end: clamp(18px, 3vw, 30px);
+  padding-block-end: clamp(14px, 2.2vh, 22px);
+}
+
+.display-main {
+  min-width: 0;
+  overflow: visible;
+  padding: .025em .075em .075em 0;
+  font-family: var(--rm-font-numeric);
+  font-size: clamp(3.15rem, 12vw, 6.25rem);
+  font-weight: 850;
+  line-height: .94;
+  letter-spacing: -.045em;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+}
+
+.display-main.display-medium {
+  font-size: clamp(2.65rem, 9.5vw, 4.9rem);
+  letter-spacing: -.035em;
+}
+
+.display-main.display-compact {
+  font-size: clamp(2rem, 6.8vw, 3.55rem);
+  letter-spacing: -.02em;
+}
+
+.key {
+  overflow: visible;
+  padding: .12em .18em .18em;
+  font-family: var(--rm-font-numeric);
+  font-size: clamp(1.3rem, 4.2vh, 2.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.025em;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+}
+
+.key-function {
+  padding-block: .22em;
+  font-family: var(--rm-font-technical);
+  font-size: clamp(.72rem, 2.05vh, 1rem);
+  line-height: 1.16;
+  letter-spacing: .02em;
+}
+
+.key-operator,
+.key-equals {
+  font-family: var(--rm-font-display);
+  font-size: clamp(1.4rem, 4.45vh, 2.35rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+@media (max-width: 520px) {
+  .display-panel {
+    padding-inline-end: 18px;
+    padding-block-end: 14px;
+  }
+
+  .display-main {
+    font-size: clamp(3rem, 17vw, 5rem);
+  }
+
+  .key {
+    font-size: clamp(1.2rem, 4.55vh, 1.9rem);
+  }
+
+  .key-operator,
+  .key-equals {
+    font-size: clamp(1.3rem, 4.8vh, 2rem);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 650px) {
+  .display-panel {
+    padding-inline-end: 14px;
+    padding-block-end: 10px;
+  }
+
+  .display-main {
+    font-size: clamp(2.55rem, 9vh, 4.35rem);
+    line-height: .96;
+  }
+
+  .key {
+    font-size: clamp(1rem, 4.35vh, 1.62rem);
+    line-height: 1.04;
+  }
+
+  .key-operator,
+  .key-equals {
+    font-size: clamp(1.1rem, 4.55vh, 1.72rem);
+  }
+}
+
+body[data-viewport="short"] .display-main {
+  font-size: clamp(2.55rem, 8.5vh, 4.2rem);
+  line-height: .96;
+}
+
+body[data-viewport="short"] .key {
+  font-size: clamp(1rem, 4.05vh, 1.58rem);
+  line-height: 1.04;
+}
