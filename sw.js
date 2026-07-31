@@ -1,9 +1,11 @@
-var CACHE = 'calculadora-foundation-v1';
+var CACHE = 'calculadora-blueprint-v3';
 var CORE = [
   './',
   './index.html',
   './manifest.json',
+  './assets/css/rafamass-blueprint.css',
   './assets/css/app.css',
+  './assets/css/numeric-refinement.css',
   './assets/js/calculator-engine.js',
   './assets/js/app.js',
   './icon-terra.png',

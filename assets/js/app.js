@@ -8,6 +8,7 @@
   var scientificPanel = document.getElementById('scientific-panel');
   var modeButton = document.getElementById('mode-toggle');
   var angleButton = document.getElementById('angle-toggle');
+  var angleLabel = angleButton.querySelector('.angle-label') || angleButton.querySelector('span');
   var viewportTimer = null;
   var scientific = false;
 
@@ -27,7 +28,7 @@
     status.textContent = snapshot.error ? 'Erro: ' + snapshot.error : 'Calculadora pronta';
     body.dataset.error = snapshot.error ? 'true' : 'false';
     body.dataset.mode = scientific ? 'scientific' : 'basic';
-    angleButton.textContent = snapshot.angleMode.toUpperCase();
+    angleLabel.textContent = snapshot.angleMode.toUpperCase();
     angleButton.setAttribute('aria-label', 'Unidade angular: ' + (snapshot.angleMode === 'deg' ? 'graus' : 'radianos'));
     angleButton.setAttribute('aria-pressed', snapshot.angleMode === 'rad' ? 'true' : 'false');
     display.className = 'display-main';
