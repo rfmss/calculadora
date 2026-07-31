@@ -12,6 +12,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="icon-terra.png">
   <link rel="stylesheet" href="assets/css/rafamass-blueprint.css">
   <link rel="stylesheet" href="assets/css/app.css">
+  <link rel="stylesheet" href="assets/css/numeric-refinement.css">
   <script data-goatcounter="https://calculadora.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
   <title>Calculadora · RafaMass</title>
 </head>
@@ -52,7 +53,7 @@
       <section class="display-panel rm-meta-strip" aria-label="Visor da calculadora">
         <div class="display-register"><span>ENTRADA / RESULTADO</span><span>15 DÍGITOS</span></div>
         <p class="display-expression" id="display-expression">pronta para calcular</p>
-        <output class="display-main" id="display-main" aria-live="polite">0</output>
+        <output class="display-main rm-type-numeric" id="display-main" aria-live="polite">0</output>
         <span class="calculator-status" id="calculator-status" role="status" aria-live="polite">Calculadora pronta</span>
       </section>
 
@@ -64,10 +65,10 @@
 
         <div class="keypad" id="basic-panel">
           <button class="key key-function rm-key" type="button" data-key="C">C</button><button class="key key-function rm-key" type="button" data-key="sign">+/−</button><button class="key key-function rm-key" type="button" data-key="%">%</button><button class="key key-operator rm-key" type="button" data-key="/">÷</button>
-          <button class="key rm-key" type="button" data-key="7">7</button><button class="key rm-key" type="button" data-key="8">8</button><button class="key rm-key" type="button" data-key="9">9</button><button class="key key-operator rm-key" type="button" data-key="*">×</button>
-          <button class="key rm-key" type="button" data-key="4">4</button><button class="key rm-key" type="button" data-key="5">5</button><button class="key rm-key" type="button" data-key="6">6</button><button class="key key-operator rm-key" type="button" data-key="-">−</button>
-          <button class="key rm-key" type="button" data-key="1">1</button><button class="key rm-key" type="button" data-key="2">2</button><button class="key rm-key" type="button" data-key="3">3</button><button class="key key-operator rm-key" type="button" data-key="+">+</button>
-          <button class="key key-zero rm-key" type="button" data-key="0">0</button><button class="key rm-key" type="button" data-key=".">,</button><button class="key key-equals rm-key" type="button" data-key="=">=</button>
+          <button class="key rm-key rm-type-numeric" type="button" data-key="7">7</button><button class="key rm-key rm-type-numeric" type="button" data-key="8">8</button><button class="key rm-key rm-type-numeric" type="button" data-key="9">9</button><button class="key key-operator rm-key" type="button" data-key="*">×</button>
+          <button class="key rm-key rm-type-numeric" type="button" data-key="4">4</button><button class="key rm-key rm-type-numeric" type="button" data-key="5">5</button><button class="key rm-key rm-type-numeric" type="button" data-key="6">6</button><button class="key key-operator rm-key" type="button" data-key="-">−</button>
+          <button class="key rm-key rm-type-numeric" type="button" data-key="1">1</button><button class="key rm-key rm-type-numeric" type="button" data-key="2">2</button><button class="key rm-key rm-type-numeric" type="button" data-key="3">3</button><button class="key key-operator rm-key" type="button" data-key="+">+</button>
+          <button class="key key-zero rm-key rm-type-numeric" type="button" data-key="0">0</button><button class="key rm-key rm-type-numeric" type="button" data-key=".">,</button><button class="key key-equals rm-key" type="button" data-key="=">=</button>
         </div>
       </section>
 
